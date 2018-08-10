@@ -13,7 +13,9 @@ import (
 	"JaegerTracer"
 )
 
-var topic = "loadData"
+var (
+	topic = "loadData"
+)
 
 func main() {
 	var brokerURLs = []string{"127.0.0.1:9092"}
