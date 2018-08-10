@@ -1,0 +1,9 @@
+{
+  "config":{
+    "mongoAddress":"mongodb://localhost",
+    "mongoDataBaseName":"liupeng",
+    "mongoCollectionName":"test",
+    "tiDBDataBaseName":"driverCloud",
+    "tiDBTableName":"driverCloud"
+  }
+}
