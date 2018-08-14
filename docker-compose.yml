@@ -9,9 +9,9 @@ services:
     - 127.0.0.1:5778:5778 # serve configs
     - 127.0.0.1:16686:16686 # serve frontend
     - 127.0.0.1:14268:14268 # accept jaeger.thrift directly from clients
-  zipkin:
-    image: openzipkin/zipkin:2.4.4
-    container_name: zipkin
-    ports:
-      - "9411:9411"
-      - "9410:9410"
+  #zipkin:
+  #  image: openzipkin/zipkin:2.4.4
+  #  container_name: zipkin
+  #  ports:
+  #    - "9411:9411"
+  #    - "9410:9410"
