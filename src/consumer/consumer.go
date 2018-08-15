@@ -14,8 +14,8 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"JaegerTracer"
 	"encoding/json"
+	"logger"
 	"time"
-	"github.com/hashicorp/consul/logger"
 )
 
 var topic = "transferData"
@@ -51,8 +51,11 @@ func main() {
 	mystruct.TableName()
 	_ , err = myBroker.Subscribe(topic, func(p broker.Publication) error {
 		json.Unmarshal(p.Message().Body,&mystruct)
+		var writeLog map[string]interface{}
+		json.Unmarshal(p.Message().Body,&writeLog)
+		logger.WriteLogFile(writeLog,"consumer")
 		db.Create(&mystruct)
-		tracer, _, _ := JaegerTracer.NewJaegerTracer("Kafka"+mystruct.ID,"127.0.0.1:6831")
+		tracer, close, _ := JaegerTracer.NewJaegerTracer("Kafka"+mystruct.ID,"127.0.0.1:6831")
 		spanContext, _ := tracer.Extract(opentracing.TextMap, opentracing.TextMapCarrier(p.Message().Header))
 		span := opentracing.StartSpan(
 			"liupengKafkaConsumer",
@@ -61,6 +64,7 @@ func main() {
 		span.SetTag("mongoId",mystruct.ID)
 		span.SetTag("出Kafka时间",time.Now().Format("2006-01-02 15:04:05"))
 		span.Finish()
+		close.Close()
 		return nil
 	})
 	if err != nil {

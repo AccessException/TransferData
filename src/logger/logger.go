@@ -10,15 +10,14 @@ import (
 var Log *logrus.Logger
 
 // 日志文件分隔
-// 暂时没用
-func MyLog(content map[string]interface{}){
+func WriteLogFile(content map[string]interface{},fileName string){
 	fields := logrus.Fields{}
 	logFields := content
 	logFields["@timestamp"] = time.Now().Format("2006-01-02 15:04:05")
 	fields = logFields
 	logf, err := rotatelogs.New(
 		// 修改路径
-		"/Users/apple/go/TransferData/src/log/install.%Y-%m-%d.log",
+		"/Users/apple/go/TransferData/src/logger/"+fileName+".%Y-%m-%d.log",
 		rotatelogs.WithMaxAge(7*24*time.Hour),
 		rotatelogs.WithRotationTime(24*time.Hour),
 	)

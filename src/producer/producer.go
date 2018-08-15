@@ -12,6 +12,8 @@ import (
 	"JaegerTracer"
 	"entity"
 	"encoding/json"
+	"strconv"
+	"logger"
 	"time"
 )
 
@@ -58,8 +60,11 @@ func main() {
 			Model: model,
 			ID: myStruct.ID.Hex(),
 		})
+		var writeLog map[string]interface{}
+		json.Unmarshal(body,&writeLog)
+		logger.WriteLogFile(writeLog,"producer")
 		header := make(map[string]string)
-		tracer, _, _ := JaegerTracer.NewJaegerTracer("Kafka"+myStruct.ID.Hex(), "127.0.0.1:6831")
+		tracer, close, _ := JaegerTracer.NewJaegerTracer("Kafka"+myStruct.ID.Hex(), "127.0.0.1:6831")
 		span := tracer.StartSpan("liupengKafkaProducer")
 		md := make(map[string]string)
 		err = tracer.Inject(span.Context(), opentracing.TextMap, opentracing.TextMapCarrier(md))
@@ -68,12 +73,13 @@ func main() {
 		span.SetTag("进Kafka时间",time.Now().Format("2006-01-02 15:04:05"))
 		header = md
 		span.Finish()
+		close.Close()
 		msg := &broker.Message{
 			Header: header,
 			Body:   body,
 		}
 		if err := myBroker.Publish(topic, msg); err == nil {
-			log.Println("发送成功！")
+			log.Println("发送成功！"+strconv.Itoa(i))
 		} else {
 			log.Println("发送失败！", err.Error())
 		}
