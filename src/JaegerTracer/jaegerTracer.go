@@ -44,6 +44,8 @@ func NewJaegerTracer(serviceName string, jagentHost string) (tracer opentracing.
 		ServiceName:serviceName,
 	}
 	//metricsFactory := uberPrometheus.New(uberPrometheus.WithRegisterer(clientPrometheus.NewPedanticRegistry()))
+
+	//metricsFactory:=uberPrometheus.New()
 	tracer, closer, err = jcfg.NewTracer(
 		jaegercfg.Logger(jaeger.StdLogger),
 		//jaegercfg.Metrics(metricsFactory),
