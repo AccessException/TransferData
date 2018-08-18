@@ -8,7 +8,7 @@ import (
 func PagingFind(skip, limit int, m bson.M, collection string) ([]interface{}, error) {
 	var list []interface{}
 	query := func(c *mgo.Collection) error {
-		return c.Find(m).Sort("-create_at", "-created_at").Skip(skip).Limit(limit).All(&list)
+		return c.Find(m).Sort("_id", "1").Skip(skip).Limit(limit).All(&list)
 	}
 	err := GetMongoCollection(collection, query)
 	return list, err
@@ -40,13 +40,16 @@ func FindOne(m bson.M, collection string) (interface{}, error) {
 	return entity, err
 }
 
-//func Count(m bson.M, collection string) (int, error) {
-//	query := func(c *mgo.Collection) (int, error) {
-//		return c.Find(m).Count()
-//	}
-//	err := GetMongoCollection(collection, query)
-//	return err
-//}
+
+// 查询个数
+func Count(m bson.M,collectionName string) (int,error){
+	count := func(colletion *mgo.Collection) (int,error){
+		return colletion.Find(m).Count()
+	}
+	countNumber,err := GetMongoCollectionCount(collectionName,count)
+	return countNumber,err
+}
+
 
 func UpdateById(id bson.ObjectId, m bson.M, collection string) error {
 	query := func(c *mgo.Collection) error {

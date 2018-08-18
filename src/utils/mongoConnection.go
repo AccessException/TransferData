@@ -36,3 +36,13 @@ func GetMongoCollection(collection string, s func(*mgo.Collection) error ) error
 	c := session.DB(Config.MongoDataBaseName).C(collection)
 	return s(c)
 }
+
+// mongoDB获取collection对象个数
+func GetMongoCollectionCount(collectionName string,method func(session *mgo.Collection) (int,error)) (int,error){
+	session:= getSession()
+	defer session.Close()
+	// 数据库名      集合名
+	collection := session.DB(Config.MongoDataBaseName).C(collectionName)
+	// 使用方法
+	return method(collection)
+}

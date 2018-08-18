@@ -19,7 +19,8 @@ import (
 	"os/signal"
 )
 
-var topic = "transferData"
+// 驼峰命名（分区有问题）
+var topic = "transfer_data"
 
 type myStruct struct {
 	ID 		string 				`json:"_id"`
