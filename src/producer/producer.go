@@ -14,7 +14,7 @@ import (
 	"strconv"
 )
 
-var topic = "transfer_data"
+var topic = "transferData"
 
 type MyStruct struct {
 	ID 		bson.ObjectId 		`json:"_id"`
@@ -22,11 +22,18 @@ type MyStruct struct {
 
 // Kafka 分区在 /usr/local/etc/kafka/server.properties中设置
 // num.partitions=5 创建5个分区 修改后重新启功Zookeeper Kafka
+// 通过命令修改分区 kafka-topics --zookeeper 127.0.0.1:2181  --alter --topic transfer_data --partitions 4
+// 消费者启动会创建topic，partition
 func main() {
+	//设置配置
 	config := sarama.NewConfig()
+	//等待服务器所有副本都保存成功后的响应
 	config.Producer.RequiredAcks = sarama.WaitForAll
+	////随机的分区类型
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
+	//是否等待成功和失败后的响应,只有上面的RequireAcks设置不是NoReponse这里才有用.
 	config.Producer.Return.Successes = true
+	config.Version = sarama.V1_0_0_0
 	msg := &sarama.ProducerMessage{}
 	msg.Topic = topic
 	producer, _ := sarama.NewSyncProducer([]string{"127.0.0.1:9092"}, config)

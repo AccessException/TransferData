@@ -4,6 +4,9 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"strconv"
+	"github.com/modern-go/reflect2"
+	"reflect"
+
 )
 
 type Person struct{
@@ -19,7 +22,7 @@ func main() {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("liupeng").C("test")
 	p := Person{}
-	for i:=0;i<5000;i++{
+	for i:=0;i<0;i++{
 		p.Name = "liupeng"+strconv.Itoa(i)
 		p.Age = i
 		err = c.Insert(&p)
@@ -27,4 +30,16 @@ func main() {
 			log.Println(err)
 		}
 	}
+	//var m entity.Model
+	model := reflect2.TypeByName("main.Person")
+	d := model.Type1()
+	log.Println(d.Field(1))
+	log.Println(model)
+	log.Println("&&&&&&&",reflect.TypeOf(model))
+
+	//typByPkg := reflect2.TypeByPackageName(
+	//	"github.com/modern-go/reflect2-tests",
+	//	"MyStruct")
+	//log.Println(typByPkg)
+
 }

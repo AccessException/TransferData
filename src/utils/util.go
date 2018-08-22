@@ -57,4 +57,9 @@ type ConfigJson struct {
 	TiDBTableName string `"json:tiDBTableName"`
 }
 
+// 返回model
+func Creater(model string) interface{}{
+	
+	return nil
+}
 

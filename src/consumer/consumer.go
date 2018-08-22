@@ -19,8 +19,8 @@ import (
 	"os/signal"
 )
 
-// 驼峰命名（分区有问题）
-var topic = "transfer_data"
+// 驼峰命名（分区有问题有待观察）
+var topic = "transferData"
 
 type myStruct struct {
 	ID 		string 				`json:"_id"`
@@ -34,6 +34,15 @@ func main() {
 	}
 	// 自动创建表
 	db.AutoMigrate(&myStruct{})
+	config := sarama.NewConfig()
+	config.Version = sarama.V1_0_0_0
+	admin, err := sarama.NewClusterAdmin([]string{"127.0.0.1:9092"}, config)
+	if err != nil{
+		log.Println(err)
+	}
+	// 创建分区
+	admin.CreateTopic(topic, &sarama.TopicDetail{NumPartitions: 10, ReplicationFactor: 1}, false)
+	admin.Close()
 	topics := []string{topic}
 	var wg = &sync.WaitGroup{}
 	wg.Add(5)

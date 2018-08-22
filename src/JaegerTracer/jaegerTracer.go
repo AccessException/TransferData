@@ -42,14 +42,19 @@ func NewJaegerTracer(serviceName string, jagentHost string) (tracer opentracing.
 			LocalAgentHostPort:  jagentHost,
 		},
 		ServiceName:serviceName,
+		//RPCMetrics:true,
 	}
-	//metricsFactory := uberPrometheus.New(uberPrometheus.WithRegisterer(clientPrometheus.NewPedanticRegistry()))
 
+	//metricsFactory := uberPrometheus.New(uberPrometheus.WithRegisterer(clientPrometheus.NewPedanticRegistry()))
 	//metricsFactory:=uberPrometheus.New()
+	//metricsFactory.Namespace("liuPeng",nil)
 	tracer, closer, err = jcfg.NewTracer(
 		jaegercfg.Logger(jaeger.StdLogger),
 		//jaegercfg.Metrics(metricsFactory),
 	)
+	//tags := map[string]string{"name":"jaeger.traces", "state":"started", "sampled":"y"}
+	//m := jaeger.NewMetrics(metricsFactory,nil)
+	//m.SpansStartedSampled.Inc(1)
 	if err != nil {
 		return
 	}
