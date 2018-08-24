@@ -6,8 +6,8 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
-	//uberPrometheus "github.com/uber/jaeger-lib/metrics/prometheus"
-	//clientPrometheus "github.com/prometheus/client_golang/prometheus"
+	uberPrometheus "github.com/uber/jaeger-lib/metrics/prometheus"
+	clientPrometheus "github.com/prometheus/client_golang/prometheus"
 )
 
 func NewJaegerTracer(serviceName string, jagentHost string) (tracer opentracing.Tracer, closer io.Closer, err error) {
@@ -45,16 +45,11 @@ func NewJaegerTracer(serviceName string, jagentHost string) (tracer opentracing.
 		//RPCMetrics:true,
 	}
 
-	//metricsFactory := uberPrometheus.New(uberPrometheus.WithRegisterer(clientPrometheus.NewPedanticRegistry()))
-	//metricsFactory:=uberPrometheus.New()
-	//metricsFactory.Namespace("liuPeng",nil)
+	metricsFactory := uberPrometheus.New(uberPrometheus.WithRegisterer(clientPrometheus.NewPedanticRegistry()))
 	tracer, closer, err = jcfg.NewTracer(
 		jaegercfg.Logger(jaeger.StdLogger),
-		//jaegercfg.Metrics(metricsFactory),
+		jaegercfg.Metrics(metricsFactory),
 	)
-	//tags := map[string]string{"name":"jaeger.traces", "state":"started", "sampled":"y"}
-	//m := jaeger.NewMetrics(metricsFactory,nil)
-	//m.SpansStartedSampled.Inc(1)
 	if err != nil {
 		return
 	}
