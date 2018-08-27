@@ -2,4 +2,4 @@
 
 从MongoDB中获取数据通过Kafka插入TiDB,使用Jaeger全程跟踪，功能已经完成，还需进一步优化。
 
-使用prometheus可查看指标。
+使用prometheus可查看指标,可使用alertalertmanager提供告警功能。
