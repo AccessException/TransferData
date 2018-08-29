@@ -1,0 +1,32 @@
+#/usr/lib/systemd/system
+[Unit]
+Description=liupeng.TestSystemd daemon
+After=network.target
+
+[Service]
+#Type=forking
+#Environment='TestSystemd_HOME=/Users/apple/go/TransferData/src/test'
+#WorkingDirectory=/Users/apple/go/TransferData/src/test
+#PIDFile=/Users/apple/go/TransferData/src/test/TestSystemd.pid
+ExecStart=/Users/apple/go/TransferData/src/test/TestSystemd
+Restart=on-failure
+RestartSec=3s
+#User=support
+#Group=support
+
+[Install]
+WantedBy=multi-user.target
+
+# 拷贝 systemd.service文件 到 /usr/lib/systemd/system
+# cp /Users/apple/go/TransferData/systemd/systemd.service /usr/lib/systemd/system/
+
+# 查看服务状态
+# systemctl status systemd.service  -l
+# 启动服务
+# systemctl start systemd.service
+# 停止服务
+# systemctl stop systemd.service
+# 查看指定Unit日志
+# journalctl -u systemd.service -f
+# 设置开机启动
+# systemctl enable systemd.service
