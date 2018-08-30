@@ -10,7 +10,7 @@ After=network.target
 #PIDFile=/Users/apple/go/TransferData/src/test/TestSystemd.pid
 ExecStart=/Users/apple/go/TransferData/src/test/TestSystemd
 Restart=on-failure
-RestartSec=5s
+RestartSec=3s
 #User=support
 #Group=support
 
